@@ -1,0 +1,23 @@
+[legacy]
+new-terminal-mode='tab'
+schema-version=uint32 3
+
+[legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9]
+use-theme-transparency=false
+
+[legacy/profiles:]
+list=['b1dcc9dd-5262-4d8d-a863-c897e6d979b9', '19ffecea-6632-4cb0-b41d-4eb0ca0dee7a', '6f6d9eb9-0e77-41a5-bded-257faf08b52f', '83bdda03-6c0e-46d9-ba4c-826baaa452a5']
+default='19ffecea-6632-4cb0-b41d-4eb0ca0dee7a'
+
+[legacy/profiles:/:19ffecea-6632-4cb0-b41d-4eb0ca0dee7a]
+foreground-color='rgb(21,195,233)'
+visible-name='Dal'
+palette=['rgb(21,72,97)', 'rgb(195,102,209)', 'rgb(246,133,180)', 'rgb(246,133,180)', 'rgb(60,132,224)', 'rgb(206,38,126)', 'rgb(246,133,180)', 'rgb(245,232,247)', 'rgb(21,72,97)', 'rgb(195,102,209)', 'rgb(168,213,235)', 'rgb(208,151,208)', 'rgb(246,133,180)', 'rgb(29,17,225)', 'rgb(52,226,226)', 'rgb(202,154,217)']
+use-system-font=false
+use-transparent-background=true
+use-theme-colors=false
+use-theme-transparency=false
+bold-color-same-as-fg=false
+bold-color='rgb(157,22,247)'
+background-color='rgb(1,0,3)'
+background-transparency-percent=27
