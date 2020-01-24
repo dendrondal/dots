@@ -131,6 +131,9 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 #Poetry autocompletion
+fpath+=~/.zfunc
+
+#Pipx autocompletion
 autoload -U bashcompinit
 bashcompinit
 eval "$(register-python-argcomplete pipx)"
