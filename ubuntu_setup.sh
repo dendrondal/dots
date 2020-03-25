@@ -3,6 +3,7 @@
 #Key tools:
 sudo apt-get update
 sudo apt-get install git
+git config --global credential.helper store
 sudo apt-get install curl
 sudo apt-get install xsel
 sudo apt-get install wget
