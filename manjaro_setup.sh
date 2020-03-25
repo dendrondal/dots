@@ -7,6 +7,7 @@ git config --global credential.helper store
 
 #IDE
 sudo pacman -S visual-studio-code-bin
+cp settings.json ~/.config/Code/User/settings.json
 
 #Python Goodies
 sudo pacman -S pyenv-git
@@ -24,3 +25,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 sudo git clone https://github.com/zsh-users/zsh-autosuggestions.git $ZSH_CUSTOM/plugins/zsh-autosuggestions
 sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $ZSH_CUSTOM/plugins/zsh-syntax-highlighting
 dconf load /org/gnome/terminal/ < gnome_terminal_settings_backup.txtonts-git
+
+#Misc
+sudo pacman -S spotify
+sudo pacman -S brave-bin
