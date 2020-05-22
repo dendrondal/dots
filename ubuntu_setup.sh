@@ -4,19 +4,15 @@
 sudo apt-get update
 sudo apt-get install git
 git config --global credential.helper store
-sudo apt-get install curl
-sudo apt-get install xsel
-sudo apt-get install wget
-sudo apt-get install snapd
-sudo apt-get install htop
+sudo apt install curl xsel wget htop software-properties-common apt-transport-https 
 
 #Python goodies
-sudo snap install --classic code
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt update
+sudo apt install code
 curl https://pyenv.run | bash
-curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-python get-pip.py
-python3 -m pip install pipx
-pipx install poetry
+
 
 #ZSH goodies
 sudo apt-get install zsh
