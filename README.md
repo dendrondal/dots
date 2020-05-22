@@ -2,14 +2,15 @@
 This repository tracks my Linux computing environment for super-quick setup on any Debian-based environment. It installs:
 
 - wget & curl
-- snap
 - htop
 - zsh
 - oh my zsh
 - Beautiful terminal pallettes
 - .zshrc profile full of aliases, etc
+- Pyenv
 - VSCode
-- Pip, Pipx, Pyenv, & Poetry for further python installation
+
+For i3 based environments, there's also a first time setup script, along with relevant i3 and polybar configs.
 
 # Execution
 Download, and run:
@@ -17,6 +18,8 @@ Download, and run:
 `chmod a+x ubuntu_setup.sh`
 
 `sh ubuntu_setup.sh`
+
+The same works with `i3-setup`
 
 # License
 MIT License
