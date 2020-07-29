@@ -34,6 +34,8 @@ Also make sure you have vundle:
 
 Now just copy the .vimrc vile to your home folder, and run `:PluginInstall` inside of vim.
 
+For YouCompleteMe, remember to run `install.py` inside of /.vim/plugged.
+
 # License
 MIT License
 
