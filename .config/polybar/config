@@ -43,6 +43,7 @@ volume-max = #bf616a
 ################################################################################
 
 [bar/mainbar-i3]
+enable-ipc = true
 monitor = ${env:MONITOR}
 ;monitor-fallback = HDMI1
 monitor-strict = false
@@ -79,9 +80,9 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 # Layout top
 
-modules-left =desno3 desno4 desno3 wireless-network desno4
+modules-left =jgmenu agenda desno2 desno3 wireless-network desno4
 modules-center =tp2 clock tp1
-modules-right =  levo3 alsa levo4 levo1 battery
+modules-right =  levo3 alsa levo4 levo1 mpris battery
 
 separator =
 
@@ -96,7 +97,6 @@ tray-offset-y = 0
 tray-padding = 4
 tray-scale = 1.0`
 
-enable-ipc = true
 
 click-left =
 click-middle =
@@ -147,9 +147,9 @@ font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
 # Layout bottom
 
-modules-left =jgmenu levo3 memory2 levo4 levo1 cpu2 levo2
+modules-left =levo3 memory2 levo4 levo1 cpu2 levo2
 modules-center =bt1 i3 bt2
-modules-right = desno3 uptime desno4 desno1 kernel desno2
+modules-right = desno1 uptime desno2 desno3 kernel desno4
 
 separator =
 
@@ -561,6 +561,13 @@ animation-charging-4 = 
 animation-charging-foreground = #ffffff
 animation-charging-framerate = 750
 
+[module/agenda]
+type = custom/script
+; Show the next event and forget cache automatically every 15 mins.
+exec = i3-agenda -c ~/.google_credentials/credentials.json -ttl 15
+interval = 60
+format-foreground = #000000
+format-background = ${xrdb:color13:#955ae7}
 
 ################################################################################
 
@@ -685,7 +692,8 @@ tail = false
 interval = 1024
 
 format-foreground = #000000
-format-background = ${xrdb:color13:#955ae7}
+
+format-background = ${xrdb:color13:#be4678}
 format-prefix = "  "
 format-prefix-foreground = #000000
 
@@ -793,55 +801,15 @@ format-background = ${colors.background}
 
 ################################################################################
 
-[module/previous]
+[module/mpris]
 type = custom/script
-interval = 86400
-format = "%{T3}<label>"
-format-padding = 5
-; Previous song icon
-exec = echo ""
-; Check if spotify is running before displaying the icon
-exec-if = "pgrep spotify"
-format-underline = #1db954
-line-size = 1
-click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
-
-[module/next]
-type = custom/script
-interval = 86400
-format = "%{T3}<label>"
-format-padding = 5
-; Next song icon
-exec = echo ""
-; Check if spotify is running before displaying the icon
-exec-if = "pgrep spotify"
-format-underline = #1db954
-line-size = 1
-click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
-
-[module/playpause]
-type = custom/ipc
-; Default
-hook-0 = echo ""
-; Playing
-hook-1 = echo ""
-; Paused
-hook-2 = echo ""
-initial = 1
-format-underline = #1db954
-line-size = 1
-click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
-
-[module/spotify]
-type = custom/ipc
-hook-0 = echo ""
-hook-1 = python3 ~/scripts/spotify/spotify_status.py
-initial = 1
-format-padding = 4
-format-underline = #1db954
-line-size = 1
-; [i3wm only] - Uncomment the below line to focus on Spotify when clicking on the song name (credits to https://github.com/Esya)
-; click-left = i3-msg '[class="Spotify"] focus'
+exec = ~/.config/polybar/scripts/player-mpris.sh
+format-foreground = #000000
+format-background = ${xrdb:color13:#955ae7}
+interval = 3
+click-left = playerctl previous &
+click-right = playerctl next &
+click-middle = playerctl play-pause &
 
 ################################################################################
 
@@ -904,9 +872,9 @@ interval = 100
 label = Uptime : %output%
 
 format-foreground = #000000
-format-background = ${xrdb:color13:#be4678}
 format-prefix = " "
 format-prefix-foreground = #000000
+format-background = ${xrdb:color13:#955ae7}
 format-underline =
 
 ################################################################################
