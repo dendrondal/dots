@@ -76,6 +76,8 @@ plugins=(
  extract
  zsh-syntax-highlighting
  zsh-autosuggestions
+ python
+ colorize
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -83,6 +85,7 @@ source $ZSH/oh-my-zsh.sh
 # User configuration
 
 export MANPATH="/usr/local/man:$MANPATH"
+
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -110,11 +113,13 @@ export PATH=/usr/local/texlive/2019/bin/x86_64-linux:$PATH
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 fpath=($fpath "/home/dal/.zfunctions")
+alias zshconfig="vi ~/.zshrc"
 alias gpom="git push origin master"
 alias ga="git add"
 alias gs="git status"
 alias gc="git commit -m"
 alias gca="git commit -a -m"
+alias gdiff="git difftool --no-symlinks --dir-diff"
 alias paste="xsel --clipboard"
 
 fpath=($fpath "/home/dal/.zfunctions")
@@ -130,13 +135,20 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
-#Poetry autocompletion
-fpath+=~/.zfunc
+autoload -Uz compinit
+compinit
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
 
-#Pipx autocompletion
-autoload -U bashcompinit
-bashcompinit
-eval "$(register-python-argcomplete pipx)"
+#Poetry autocompletion
+#autoload -U bashcompinit
+#bashcompinit
+#eval "$(register-python-argcomplete pipx)"
+
+# Import colorscheme from 'wal' asynchronously
+# &   # Run the process in the background.
+# ( ) # Hide shell job control messages.
+(cat ~/.cache/wal/sequences &)
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
