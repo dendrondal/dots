@@ -30,9 +30,9 @@ Plugin 'tmhedberg/SimpylFold'
 " Python syntax goodies
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'fisadev/vim-isort'
-Plugin 'vim-syntastic/syntastic'
+Plugin 'dense-analysis/ale'
 " Python Intellisense
-Bundle "Valloric/YouCompleteMe"
+Plugin 'ycm-core/YouCompleteMe'
 " Fancy searching
 Plugin 'kien/ctrlp.vim'
 " File manager
@@ -65,37 +65,36 @@ map <leader>[ za<CR>
 " Indentation
 au BufNewFile,BufRead *.py
     \ set softtabstop=4 |
-    \ set textwidth=79 |
+    \ set textwidth=80 |
     \ set autoindent |
     \ set fileformat=unix |
+    \ set tabstop=4 |
+    \ set shiftwidth=4 |
+    \ set expandtab |
 
-highlight BadWhitespace ctermbg=red guibg=darkred
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 set encoding=utf-8
 set smartindent
-autocmd BufWritePost *.py :!isort %
 
+" Intellisense
 " Python autocompletion & go to definition binding
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>gd  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <leader>gf  :YcmCompleter FixIt<CR>
 map <leader>gr  :YcmCompleter GoToReferences<CR>
 
-let g:ycm_python_interpreter_path = "" 
-let g:ycm_python_sys_path = []
-let g:ycm_extra_conf_vim_data = [
-  \  'g:ycm_python_interpreter_path',
-  \  'g:ycm_python_sys_path',
-  \]
-let g:ycm_global_ycm_extra_conf = '~/global_extra_conf.py'
-syntax on
+let g:ycm_python_binary_path = 'python'
 let g:ycm_always_populate_location_list = 0
 let g:ycm_log_level = 'error'
 
-" Whitespace
-set tabstop=4
-set shiftwidth=4
-set expandtab
+" Linting
+let g:ale_fixers = {
+    \  '*': ['remove_trailing_lines', 'trim_whitespace'],
+    \  'python': ['black', 'isort']
+    \}
+let g:ale_linters = {
+    \  'python': ['flake8', 'pylint']
+    \}
+let g:ale_fix_on_save = 1
 
 " Line numbers
 set number relativenumber
