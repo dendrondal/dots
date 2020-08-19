@@ -108,7 +108,7 @@ let g:airline_theme='wal'
 let g:airline_powerline_fonts = 1
 set laststatus=2
 set noshowmode
-let g:airline#extensions#tabline#enabled = 1
+set t_RV=
 
 " Enable folder icons
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
