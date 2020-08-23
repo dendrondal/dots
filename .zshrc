@@ -3,6 +3,7 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH="/home/dal/.oh-my-zsh"
+zmodload zsh/zprof
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -59,6 +60,7 @@ ZSH_THEME="spaceship"
 # or set a custom format using the strftime function format specifications,
 # see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
+#
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
@@ -73,11 +75,8 @@ plugins=(
  colored-man-pages
  aws
  sudo
- extract
  zsh-syntax-highlighting
  zsh-autosuggestions
- python
- colorize
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -93,6 +92,9 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cudnn/l
 export CUDA_HOME=/usr/local/cuda
 export PATH=/usr/local/cuda/bin:$PATH
 export PATH=/usr/local/texlive/2019/bin/x86_64-linux:$PATH
+export EDITOR='vim'
+# History caching settings
+export HISTCONTROL=ignoreboth
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -114,6 +116,7 @@ export PATH=/usr/local/texlive/2019/bin/x86_64-linux:$PATH
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 fpath=($fpath "/home/dal/.zfunctions")
 alias zshconfig="vi ~/.zshrc"
+alias myip=$(hostname -I | awk '{print $1}') 
 alias gpom="git push origin master"
 alias ga="git add"
 alias gs="git status"
@@ -121,12 +124,59 @@ alias gc="git commit -m"
 alias gca="git commit -a -m"
 alias gdiff="git difftool --no-symlinks --dir-diff"
 alias paste="xsel --clipboard"
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias deb='sudo apt-get install' 
+alias mv='mv -i' 
+alias rm='rm -i' 
+alias cp='cp -i' 
+alias df='df -h' 
 
-fpath=($fpath "/home/dal/.zfunctions")
+### ARCHIVE EXTRACTION
+# usage: extract <file>
+extract ()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1   ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *.deb)       ar x $1      ;;
+      *.tar.xz)    tar xf $1    ;;
+      *.tar.zst)   unzstd $1    ;;      
+      *)           echo "'$1' cannot be extracted via extract()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
 
-  # Set Spaceship ZSH as a prompt
-  autoload -U promptinit; promptinit
-  prompt spaceship
+
+# Function for fancy vim mode indication
+function zle-keymap-select() {
+   zle reset-prompt zle -R
+}
+zle -N zle-keymap-select
+
+
+autoload -U colors && colors
+function vi_mode_prompt_info() {
+  echo "%{$fg[red]%}${${KEYMAP/vicmd/[% \uf6b5]%}/(main|viins)/[% \uf8ea]%}" 
+}
+
+RPS1='$(vi_mode_prompt_info)'
+RPS2=$RPS1
+# Set Spaceship ZSH as a prompt
+autoload -U promptinit; promptinit
+prompt spaceship
 
 #Pyenv autocompletion
 export PYENV_ROOT="$HOME/.pyenv"
@@ -135,10 +185,18 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
+# Loads compinit after checking for a cache once a day
 autoload -Uz compinit
-compinit
+if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+  touch .zcompdump
+else
+  compinit -C
+fi
+
 # Completion for kitty
 kitty + complete setup zsh | source /dev/stdin
+alias ssh='kitty +kitten ssh'
 
 #Poetry autocompletion
 #autoload -U bashcompinit
@@ -165,3 +223,8 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+#Custom vi keybindings
+bindkey -v
+bindkey 'jk' vi-movement-mode
+export KEYTIMEOUT=1
+SPACESHIP_VI_MODE_SHOW=false
