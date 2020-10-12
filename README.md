@@ -20,7 +20,9 @@ Download, and run:
 
 To make sure this worked sucessfully, try to open a new terminal and make sure it is a zsh shell. Also, run `pyenv global` to make sue your Python manaagement is working properly.
 
-For i3 and other ricing stuff, just copy the .config to your home folder. I plan to add a polybar install script later, as it's quite involved.
+For i3 and other ricing stuff, just copy the .config to your home folder. I plan to add a polybar install script later, as it's quite involved. With i3 and polybar configured, it should look like this:
+
+![](examples/august_2020.png)
 
 ## Vim stuff
 For the .vimrc to work, you'll need to make sure you have a full version of vim. For Debian-based systems:
