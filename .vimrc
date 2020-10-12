@@ -35,6 +35,7 @@ Plugin 'dense-analysis/ale'
 Plugin 'ycm-core/YouCompleteMe'
 " Fancy searching
 Plugin 'kien/ctrlp.vim'
+Plugin 'justinmk/vim-sneak'
 " File manager
 Plugin 'preservim/nerdtree'
 " Awesome commenting
@@ -106,6 +107,7 @@ let g:airline_theme='wal'
 
 " Airline Settings
 let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
 set laststatus=2
 set noshowmode
 set t_RV=
@@ -117,23 +119,42 @@ let g:DevIconsEnableFoldersOpenClose = 1
 " Key mappings
 inoremap jk <ESC>
 map <leader>f :NERDTreeToggle<CR>
-map <leader>d :Goyo<CR>
+map <leader>g :Goyo<CR>
 map <leader>is :Isort<CR>
 nnoremap <leader>sc :set spell!<CR>
-nnoremap <F5> :UndotreeToggle<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
+"Tabs and Splits {{{
+"when opening files in splits/tabs, I first split the current buffer into a
+"new vsplit/tab and then open the new file with whatever method suits me.
+
+"Ctrl-\ opens a vsplit
+"I remember this because shift-\ is | which looks like a vertical split.
+nnoremap <C-\> :vsp<CR>
+"tab handling
+nnoremap <leader>t :tab sp<CR>
+nnoremap <leader>w :tabc<CR>
+
+"Ctrl-Shift-ArrowKeys = resize active split
+nnoremap <C-h> :wincmd <<CR>
+nnoremap <C-l> :wincmd ><CR>
+nnoremap <C-j> :wincmd +<CR>
+nnoremap <C-k> :wincmd -<CR>
+
+"move between splits
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
-nmap <leader>X :close<CR>
+"}}}
+nmap <leader>q :close<CR>
 " Git gud: merge left and right screens after pressing `dv` while over file in
 " fugitive.
 nmap <leader>ml :diffget //2<CR>
 nmap <leader>mr :diffget //3<CR>
 
 " Tagbar
-map <F4> :TagbarToggle<CR>
+map <leader>d :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
 " Mouse disabling
@@ -161,3 +182,4 @@ endif
 " Other QOL settings
 set noerrorbells
 set incsearch
+let g:sneak#label = 1
