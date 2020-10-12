@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -9,7 +16,7 @@ zmodload zsh/zprof
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="spaceship"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -116,7 +123,8 @@ export HISTCONTROL=ignoreboth
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 fpath=($fpath "/home/dal/.zfunctions")
 alias zshconfig="vi ~/.zshrc"
-alias myip=$(hostname -I | awk '{print $1}') 
+alias vrc="vi ~/.vimrc"
+alias myip=$(hostname -I | awk '{print $1}')
 alias gpom="git push origin master"
 alias ga="git add"
 alias gs="git status"
@@ -126,11 +134,11 @@ alias gdiff="git difftool --no-symlinks --dir-diff"
 alias paste="xsel --clipboard"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias deb='sudo apt-get install' 
-alias mv='mv -i' 
-alias rm='rm -i' 
-alias cp='cp -i' 
-alias df='df -h' 
+alias deb='sudo apt-get install'
+alias mv='mv -i'
+alias rm='rm -i'
+alias cp='cp -i'
+alias df='df -h'
 
 ### ARCHIVE EXTRACTION
 # usage: extract <file>
@@ -151,7 +159,7 @@ extract ()
       *.7z)        7z x $1      ;;
       *.deb)       ar x $1      ;;
       *.tar.xz)    tar xf $1    ;;
-      *.tar.zst)   unzstd $1    ;;      
+      *.tar.zst)   unzstd $1    ;;
       *)           echo "'$1' cannot be extracted via extract()" ;;
     esac
   else
@@ -159,24 +167,26 @@ extract ()
   fi
 }
 
-
+# SPACESHIP-SPECIFIC COMMANDS
+#####################################
 # Function for fancy vim mode indication
-function zle-keymap-select() {
-   zle reset-prompt zle -R
-}
-zle -N zle-keymap-select
+#function zle-keymap-select() {
+#   zle reset-prompt zle -R
+#}
+#zle -N zle-keymap-select
 
 
-autoload -U colors && colors
-function vi_mode_prompt_info() {
-  echo "%{$fg[red]%}${${KEYMAP/vicmd/[% \uf6b5]%}/(main|viins)/[% \uf8ea]%}" 
-}
+#autoload -U colors && colors
+#function vi_mode_prompt_info() {
+#  echo "%{$fg[red]%}${${KEYMAP/vicmd/[% \uf6b5]%}/(main|viins)/[% \uf8ea]%}"
+#}
 
-RPS1='$(vi_mode_prompt_info)'
-RPS2=$RPS1
-# Set Spaceship ZSH as a prompt
-autoload -U promptinit; promptinit
-prompt spaceship
+#RPS1='$(vi_mode_prompt_info)'
+#RPS2=$RPS1
+## Set Spaceship ZSH as a prompt
+#autoload -U promptinit; promptinit
+#prompt spaceship
+####################################
 
 #Pyenv autocompletion
 export PYENV_ROOT="$HOME/.pyenv"
@@ -198,7 +208,9 @@ fi
 kitty + complete setup zsh | source /dev/stdin
 alias ssh='kitty +kitten ssh'
 
+
 #Poetry autocompletion
+#TODO: fix argcomplete import issue
 #autoload -U bashcompinit
 #bashcompinit
 #eval "$(register-python-argcomplete pipx)"
@@ -227,4 +239,7 @@ unset __conda_setup
 bindkey -v
 bindkey 'jk' vi-movement-mode
 export KEYTIMEOUT=1
-SPACESHIP_VI_MODE_SHOW=false
+#SPACESHIP_VI_MODE_SHOW=false
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
