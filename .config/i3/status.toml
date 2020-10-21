@@ -1,0 +1,52 @@
+icons = "awesome"
+
+[theme]
+name = "slick"
+[theme.overrides]
+info_bg = "#f694c1"
+info_fg = "#2e2e2e"
+idle_bg = "#15c3e9"
+idle_fg = "#2e2e2e"
+good_bg = "#e8abff"
+good_fg = "#2e2e2e"
+warning_bg = "#15c3e9"
+warning_fg = "#2e2e2e"
+critical_bg = "#15c3e9"
+critical_fg = "#2e2e2e"
+separator_bg = "auto"
+separator_fg = "auto"
+
+[[block]]
+block = "music"
+player = "spotify"
+buttons = ["prev", "play", "next"]
+max_width = 30
+
+[[block]]
+block = "net"
+device = "enp3s0"
+format = "{speed_down}{graph_down}"
+
+[[block]]
+block = "memory"
+format_mem = "{Mug}GB/{MTg}GB"
+format_swap = "{SUg}GB/{STg}GB"
+display_type = "memory"
+clickable = true
+interval = 15
+warning_mem = 80
+warning_swap = 80
+critical_mem = 95
+critical_swap = 95
+
+[[block]]
+block = "cpu"
+interval = 1
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "time"
+interval = 15
+format = "%a %m/%d %R"
