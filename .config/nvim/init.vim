@@ -59,6 +59,8 @@ call plug#begin()
 	Plug 'majutsushi/tagbar'
 	" Distraction-free mode (bound to <leader>g)
 	Plug 'junegunn/goyo.vim'
+	" Writing integration for better md/rst linebreaks:
+	Plug 'reedes/vim-pencil'
 	" Git integration
 	Plug 'tpope/vim-fugitive'
 	Plug 'airblade/vim-gitgutter'
@@ -102,6 +104,7 @@ set completeopt-=preview
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 let g:jedi#completions_enabled = 0
 let g:jedi#use_splits_not_buffers = 'right'
+
 " Linting
 let g:ale_fixers = {
     \  '*': ['remove_trailing_lines', 'trim_whitespace'],
@@ -115,6 +118,12 @@ let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_linters = {'python': ['flake8']}
 
+" RST/MD tools
+augroup pencil
+    autocmd!
+    autocmd FileType markdown call pencil#init({'wrap': 'soft', 'autoformat': 1})
+    autocmd FileType rst call pencil#init({'wrap': 'soft', 'autoformat': 1})
+augroup end
 
 "" Line numbers
 set number relativenumber
@@ -149,6 +158,7 @@ map <leader>gg :GitGutterToggle<CR>
 map <leader>is :Isort<CR>
 nnoremap <leader>sc :set spell!<CR>
 nnoremap <leader>u :UndotreeToggle<CR>
+
 "Tabs and Splits {{{
 "when opening files in splits/tabs, I first split the current buffer into a
 "new vsplit/tab and then open the new file with whatever method suits me.
@@ -163,7 +173,6 @@ nnoremap <C-h> :wincmd <<CR>
 nnoremap <C-l> :wincmd ><CR>
 nnoremap <C-j> :wincmd +<CR>
 nnoremap <C-k> :wincmd -<CR>
-
 "move between splits
 nnoremap <leader>h :wincmd h<CR>
 nnoremap <leader>j :wincmd j<CR>
@@ -172,6 +181,7 @@ nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 "}}}
 nmap <leader>q :close<CR>
+
 " Git gud: merge left and right screens after pressing `dv` while over file in
 " fugitive.
 nmap <leader>ml :diffget //2<CR>
