@@ -8,7 +8,7 @@
 sudo apt-get update
 sudo apt-get install git
 git config --global credential.helper store
-sudo apt install -y curl xsel wget htop software-properties-common apt-transport-https 
+sudo apt install -y curl xsel wget htop software-properties-common apt-transport-https feh
 
 # Terminal Emulator
 curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
@@ -21,6 +21,8 @@ cp ~/.local/kitty.app/share/applications/kitty.desktop ~/.local/share/applicatio
 sed -i "s|Icon=kitty|Icon=/home/$USER/.local/kitty.app/share/icons/hicolor/256x256/apps/kitty.png|g" ~/.local/share/applications/kitty.desktop
 
 #Neovim (with vimrc for redundancy)
+sudo add-apt-repository ppa:neovim-ppa/stable
+sudo apt-get update
 sudo apt-get install neovim
 mkdir ~/.config/nvim/init.vim
 cp -rf .config/nvim/init.vim ~/.config/nvim/init.vim
@@ -46,3 +48,15 @@ python3 -m pip install --user pipx
 python3 -m pipx ensurepath
 pipx install poetry
 
+#Ricing
+sudo apt-add-repository ppa:kgilmer/speed-ricer
+sudo apt-get update
+sudo apt-get install i3-gaps-wm polybar pywal
+mkdir ~/.config/i3
+cp .config/i3/config ~/.config/i3/config/
+mkdir ~/.config/polybar
+cp .config/polybar/* ~/.config/polybar/
+mkdir ~/.config/rofi
+cp .config/rofi/config.rasi ~/.config/rofi/
+mkdir ~/.config/wal
+cp .config/wal/* ~/.config/wal/
