@@ -44,14 +44,15 @@ sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev \
 xz-utils tk-dev libffi-dev liblzma-dev python-openssl 
 curl https://pyenv.run | zsh
-python3 -m pip install --user pipx
-python3 -m pipx ensurepath
+python -m pip install --user pipx
+python -m pipx ensurepath
 pipx install poetry
+pipx install black
 
 #Ricing
 sudo apt-add-repository ppa:kgilmer/speed-ricer
 sudo apt-get update
-sudo apt-get install i3-gaps-wm polybar pywal
+sudo apt-get install i3-gaps-wm polybar pywal dunst
 mkdir ~/.config/i3
 cp .config/i3/config ~/.config/i3/config/
 mkdir ~/.config/polybar
