@@ -36,6 +36,8 @@ call plug#begin()
 	" statusline
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
+	" Popup terminal
+	Plug 'voldikss/vim-floaterm'
 	" PyWal integration
 	Plug 'dylanaraps/wal.vim'
 	" Code folding
@@ -44,15 +46,17 @@ call plug#begin()
 	Plug 'vim-scripts/indentpython.vim'
 	Plug 'fisadev/vim-isort'
 	Plug 'dense-analysis/ale'
-	" Python Intellisense
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	Plug 'zchee/deoplete-jedi'
-	Plug 'davidhalter/jedi-vim'
+	" Intellisense
+	Plug 'neovim/nvim-lspconfig'
+	Plug 'kabouzeid/nvim-lspinstall'
+	Plug 'ms-jpq/coq_nvim', {'branch': 'coq'}
+	Plug 'ms-jpq/coq.artifacts', {'branch': 'artifacts'}
 	" Fancy searching
-	Plug 'kien/ctrlp.vim'
+	Plug 'nvim-lua/plenary.nvim'
+	Plug 'nvim-telescope/telescope.nvim'
 	Plug 'justinmk/vim-sneak'
-	" File manager
-	Plug 'preservim/nerdtree'
+	" File manager (NOTE: run :CHADdeps on install)
+	Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
 	" Awesome commenting
 	Plug 'preservim/nerdcommenter'
 	" Object Inspection
@@ -61,6 +65,10 @@ call plug#begin()
 	Plug 'junegunn/goyo.vim'
 	" Writing integration for better md/rst linebreaks:
 	Plug 'reedes/vim-pencil'
+	" Tags for html/xml/rst:
+        Plug 'tpope/vim-surround'
+	" Indentation lines for yaml:
+	Plug 'Yggdroot/indentline', {'for': 'yaml'}
 	" Git integration
 	Plug 'tpope/vim-fugitive'
 	Plug 'airblade/vim-gitgutter'
@@ -70,6 +78,7 @@ call plug#begin()
 	Plug 'mbbill/undotree'
 	" Fancier icons
 	Plug 'ryanoasis/vim-devicons'
+
 
 " All of your Plugs must be added before the following line
 
@@ -95,15 +104,6 @@ au BufNewFile,BufRead *.py
 set encoding=utf-8
 set smartindent
 
-" Intellisense
-" Python autocompletion & go to definition binding
-let g:deoplete#enable_at_startup=1
-let g:deoplete#auto_complete = 1
-set completeopt+=noinsert
-set completeopt-=preview
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-let g:jedi#completions_enabled = 0
-let g:jedi#use_splits_not_buffers = 'right'
 
 " Linting
 let g:ale_fixers = {
@@ -116,7 +116,21 @@ let g:ale_lint_on_text_changed = 'never'
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_linters = {'python': ['flake8']}
+let g:ale_linters = {'python': ['pylint']}
+let g:ale_python_black_options = '-S'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+
+" COQ?
+
+lua  <<  EOF
+require'lspinstall'.setup() -- important
+local servers = require'lspinstall'.installed_servers()
+for _, server in pairs(servers) do
+  require'lspconfig'[server].setup{autostart =  true}
+end
+EOF
+let g:coq_settings = {'auto_start': v:true}
 
 " RST/MD tools
 augroup pencil
@@ -124,6 +138,13 @@ augroup pencil
     autocmd FileType markdown call pencil#init({'wrap': 'soft', 'autoformat': 1})
     autocmd FileType rst call pencil#init({'wrap': 'soft', 'autoformat': 1})
 augroup end
+
+" Yaml tools
+au BufNewFile,BufRead *.{yaml,yml}
+    \ set filetype=yaml |
+    \ setlocal ts=2 sts=2 sw=2 expandtab |
+    \ set foldlevelstart=20 |
+let g:indentLine_char_list = ['¦', '┆', '┊']
 
 "" Line numbers
 set number relativenumber
@@ -135,7 +156,6 @@ let g:airline_theme='wal'
 
 " Airline Settings
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
 let g:airline_section_warning = 0
 set laststatus=2
 set noshowmode
@@ -151,9 +171,9 @@ let g:DevIconsEnableFoldersOpenClose = 1
 
 " Key mappings
 inoremap jk <ESC>
+nmap <leader>q :close<CR>
 vnoremap <leader>p "_dP<CR>
-map <leader>f :NERDTreeToggle<CR>
-map <leader>g :Goyo<CR>
+map <leader>f :CHADopen<CR>
 map <leader>gg :GitGutterToggle<CR>
 map <leader>is :Isort<CR>
 nnoremap <leader>sc :set spell!<CR>
@@ -165,9 +185,13 @@ nnoremap <leader>u :UndotreeToggle<CR>
 "Ctrl-\ opens a vsplit
 "I remember this because shift-\ is | which looks like a vertical split.
 nnoremap <C-\> :vsp<CR>
+nnoremap <C-s> :split<CR>
 "tab handling
 nnoremap <leader>t :tab sp<CR>
 nnoremap <leader>w :tabc<CR>
+"buffer navigation
+map H :bp<CR>
+map L :bn<CR>
 "Ctrl-Shift-ArrowKeys = resize active split
 nnoremap <C-h> :wincmd <<CR>
 nnoremap <C-l> :wincmd ><CR>
@@ -180,7 +204,11 @@ nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 "}}}
-nmap <leader>q :close<CR>
+
+" Floating terminal
+let g:floaterm_keymap_toggle = '<F12>'
+let g:floaterm_width = 0.9
+let g:floaterm_height = 0.9
 
 " Git gud: merge left and right screens after pressing `dv` while over file in
 " fugitive.
@@ -188,8 +216,16 @@ nmap <leader>ml :diffget //2<CR>
 nmap <leader>mr :diffget //3<CR>
 
 " Tagbar
-map <leader>d :TagbarToggle<CR>
+map <leader>v :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
+
+" Telescope
+nnoremap <silent> <leader>s :Telescope find_files<CR>
+nnoremap <silent> <leader>g :Telescope live_grep<CR>
+nnoremap <silent> <leader>/ :Telescope commands<CR>
+nnoremap <silent> <C-g> :Telescope git_commits<CR>
+nnoremap <silent> <C-f> :Telescope git_bcommits<CR>
+nnoremap <silent> <leader>b :Telescope buffers<CR>
 
 " Mouse disabling
 set mouse =
@@ -211,6 +247,7 @@ endif
 if !isdirectory(&undodir)
     call mkdir(&undodir, "p")
 endif
+
 
 " Other QOL settings
 set noerrorbells
