@@ -36,16 +36,16 @@ call plug#begin()
 	" statusline
 	Plug 'vim-airline/vim-airline'
 	Plug 'vim-airline/vim-airline-themes'
-	" Popup terminal
-	Plug 'voldikss/vim-floaterm'
 	" PyWal integration
 	Plug 'dylanaraps/wal.vim'
 	" Code folding
 	Plug 'tmhedberg/SimpylFold'
 	" Python syntax goodies
 	Plug 'vim-scripts/indentpython.vim'
+	Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 	Plug 'fisadev/vim-isort'
 	Plug 'dense-analysis/ale'
+	Plug 'glepnir/lspsaga.nvim'
 	" Intellisense
 	Plug 'neovim/nvim-lspconfig'
 	Plug 'kabouzeid/nvim-lspinstall'
@@ -55,13 +55,13 @@ call plug#begin()
 	Plug 'nvim-lua/plenary.nvim'
 	Plug 'nvim-telescope/telescope.nvim'
 	Plug 'justinmk/vim-sneak'
-	" File manager (NOTE: run :CHADdeps on install)
-	Plug 'ms-jpq/chadtree', {'branch': 'chad', 'do': 'python3 -m chadtree deps'}
+	" File manager
+	Plug 'preservim/nerdtree'
 	" Awesome commenting
 	Plug 'preservim/nerdcommenter'
 	" Object Inspection
 	Plug 'majutsushi/tagbar'
-	" Distraction-free mode (bound to <leader>g)
+	" Distraction-free mode
 	Plug 'junegunn/goyo.vim'
 	" Writing integration for better md/rst linebreaks:
 	Plug 'reedes/vim-pencil'
@@ -71,7 +71,7 @@ call plug#begin()
 	Plug 'Yggdroot/indentline', {'for': 'yaml'}
 	" Git integration
 	Plug 'tpope/vim-fugitive'
-	Plug 'airblade/vim-gitgutter'
+	Plug 'lewis6991/gitsigns.nvim'
 	" Vim navigation for manpages
 	Plug 'vim-utils/vim-man'
 	" FUBAR-proofing writing
@@ -123,14 +123,32 @@ let g:ale_sign_warning = '⚠'
 
 " COQ?
 
+let g:coq_settings = {
+	\ 'auto_start': v:true,
+	\ 'display': {'icons': {'mappings': {
+	\ 'Class': '',
+	\ 'Module': '',
+	\ 'TypeParameter': '',
+	\ 'Value': '',
+	\ 'Folder': '',
+	\ 'Text': '',
+	\ 'Function': 'λ',
+	\ 'Method': 'λ',
+	\ 'Constructor': 'λ'
+	\}}}}
 lua  <<  EOF
 require'lspinstall'.setup() -- important
+require('gitsigns').setup()
 local servers = require'lspinstall'.installed_servers()
+local lsp = vim.lsp
+local coq = require "coq"
+local saga = require "lspsaga"
+saga.init_lsp_saga()
 for _, server in pairs(servers) do
   require'lspconfig'[server].setup{autostart =  true}
 end
 EOF
-let g:coq_settings = {'auto_start': v:true}
+set completeopt-=preview
 
 " RST/MD tools
 augroup pencil
@@ -162,8 +180,8 @@ set noshowmode
 set ttimeoutlen=10
 set t_RV=
 let g:airline#extensions#ale#enabled = 1
-let airline#extensions#ale#error_symbol = 'E:'
-let airline#extensions#ale#warning_symbol = 'W:'
+let airline#extensions#ale#error_symbol = '✘:'
+let airline#extensions#ale#warning_symbol = '⚠:'
 
 " Enable folder icons
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1
@@ -171,61 +189,72 @@ let g:DevIconsEnableFoldersOpenClose = 1
 
 " Key mappings
 inoremap jk <ESC>
-nmap <leader>q :close<CR>
+nmap <leader>q <cmd>close<CR>
 vnoremap <leader>p "_dP<CR>
-map <leader>f :CHADopen<CR>
-map <leader>gg :GitGutterToggle<CR>
-map <leader>is :Isort<CR>
-nnoremap <leader>sc :set spell!<CR>
-nnoremap <leader>u :UndotreeToggle<CR>
+nnoremap <leader>sc <cmd>set spell!<CR>
+nnoremap <leader>u <cmd>UndotreeToggle<CR>
+nnoremap <leader>sr <cmd>source ~/.config/nvim/init.vim<CR>
+" LSP commands
+nnoremap <silent> gd <cmd>lua lsp.vim.buf.definition()<CR>
+nnoremap <silent> gr <cmd>Lspsaga lsp_finder<CR>
+nnoremap <silent> gn <cmd>Lspsaga rename<CR>
+nnoremap <silent> gs <cmd>Lspsaga signature_help<CR>
+nnoremap <silent> K <cmd>Lspsaga hover_doc<CR>
+nnoremap <silent><leader>ca :Lspsaga code_action<CR>
+vnoremap <silent><leader>ca :<C-U>Lspsaga range_code_action<CR>
 
-"Tabs and Splits {{{
-"when opening files in splits/tabs, I first split the current buffer into a
-"new vsplit/tab and then open the new file with whatever method suits me.
-"Ctrl-\ opens a vsplit
-"I remember this because shift-\ is | which looks like a vertical split.
-nnoremap <C-\> :vsp<CR>
-nnoremap <C-s> :split<CR>
+"splits
+nnoremap <C-\> <cmd>vsp<CR>
+nnoremap <C-x> <cmd>split<CR>
 "tab handling
-nnoremap <leader>t :tab sp<CR>
-nnoremap <leader>w :tabc<CR>
+nnoremap <C-t> <cmd>tab sp<CR>
+nnoremap <C-w> <cmd>tabc<CR>
 "buffer navigation
-map H :bp<CR>
-map L :bn<CR>
-"Ctrl-Shift-ArrowKeys = resize active split
-nnoremap <C-h> :wincmd <<CR>
-nnoremap <C-l> :wincmd ><CR>
-nnoremap <C-j> :wincmd +<CR>
-nnoremap <C-k> :wincmd -<CR>
+map H <cmd>bp<CR>
+map L <cmd>bn<CR>
+" ArrowKeys = resize active split
+nnoremap <silent><right> <cmd>wincmd <<CR>
+nnoremap <silent><left> <cmd>wincmd ><CR>
+nnoremap <silent><down> <cmd>wincmd +<CR>
+nnoremap <silent><up> <cmd>wincmd -<CR>
 "move between splits
-nnoremap <leader>h :wincmd h<CR>
-nnoremap <leader>j :wincmd j<CR>
-nnoremap <leader>k :wincmd k<CR>
-nnoremap <leader>l :wincmd l<CR>
+nnoremap <silent><Tab>h <cmd>wincmd h<CR>
+nnoremap <silent><Tab>j <cmd>wincmd j<CR>
+nnoremap <silent><Tab>k <cmd>wincmd k<CR>
+nnoremap <silent><Tab>l <cmd>wincmd l<CR>
+nnoremap <silent><C-right> <cmd>wincmd H<CR>
+nnoremap <silent><C-left> <cmd>wincmd L<CR>
+nnoremap <silent><C-down> <cmd>wincmd J<CR>
+nnoremap <silent><C-up> <cmd>wincmd K<CR>
 nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 "}}}
 
 " Floating terminal
-let g:floaterm_keymap_toggle = '<F12>'
-let g:floaterm_width = 0.9
-let g:floaterm_height = 0.9
+nnoremap <silent> <F12> <cmd>Lspsaga open_floaterm<CR>
+tnoremap <silent> <F12> <cmd>Lspsaga close_floaterm<CR>
 
 " Git gud: merge left and right screens after pressing `dv` while over file in
 " fugitive.
-nmap <leader>ml :diffget //2<CR>
-nmap <leader>mr :diffget //3<CR>
+nmap <leader>ml <cmd>diffget //2<CR>
+nmap <leader>mr <cmd>diffget //3<CR>
 
 " Tagbar
-map <leader>v :TagbarToggle<CR>
+map <leader>v <cmd>TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
 " Telescope
-nnoremap <silent> <leader>s :Telescope find_files<CR>
-nnoremap <silent> <leader>g :Telescope live_grep<CR>
-nnoremap <silent> <leader>/ :Telescope commands<CR>
-nnoremap <silent> <C-g> :Telescope git_commits<CR>
-nnoremap <silent> <C-f> :Telescope git_bcommits<CR>
-nnoremap <silent> <leader>b :Telescope buffers<CR>
+nnoremap <silent> <leader>f <cmd>Telescope find_files<CR>
+nnoremap <silent> <leader>g <cmd>Telescope live_grep<CR>
+nnoremap <silent> <leader>/ <cmd>Telescope commands<CR>
+nnoremap <silent> <C-g> <cmd>Telescope git_commits<CR>
+nnoremap <silent> <C-f> <cmd>Telescope git_bcommits<CR>
+nnoremap <silent> <leader>b <cmd>Telescope buffers<CR>
+
+" NERDTree
+map <leader>t <cmd>NERDTreeToggle<CR>
+let g:NERDTreeMapOpenVSplit = "v"
+let g:NERDTreeMapOpenSplit = "x"
+
 
 " Mouse disabling
 set mouse =
