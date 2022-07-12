@@ -86,7 +86,7 @@ font-4 = "FontAwesome 5 Brands:pixelsize=8;1"
 
 # Layout top
 
-modules-left =jgmenu xbacklight desno2 desno3 wireless-network desno4
+modules-left =jgmenu agenda desno2 desno3 wireless-network desno4
 modules-center =tp2 clock tp1
 modules-right =  levo3 alsa levo4 levo1 mpris battery
 
@@ -327,7 +327,7 @@ content-background = ${colors.background}
 ; grey to Blue
 type = custom/text
 content = "%{T2}%{T-}"
-content-font = 0
+content-font = 2
 content-foreground = ${colors.background}
 content-background = ${xrdb:color2:#955ae7}
 [module/desno3]
@@ -410,7 +410,7 @@ content-background = ${colors.background}
 type = custom/text
 content = "%{T2}%{T-}"
 content-font = 2
-content-foreground = ${colors.blue}
+content-foreground = ${xrdb:color2:#be4678}
 content-background = ${colors.background}
 
 

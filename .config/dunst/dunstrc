@@ -222,7 +222,7 @@
     # corners.
     # The radius will be automatically lowered if it exceeds half of the
     # notification height to avoid clipping text and/or icons.
-    corner_radius = 0
+    corner_radius = 4
 
     # Ignore the dbus closeNotification message.
     # Useful to enforce the timeout set by dunst configuration. Without this
@@ -278,7 +278,7 @@
     close = ctrl+space
 
     # Close all notifications.
-    close_all = ctrl+shift+space
+    close_all = mod4+q
 
     # Redisplay last message(s).
     # On the US keyboard layout "grave" is normally above TAB and left
