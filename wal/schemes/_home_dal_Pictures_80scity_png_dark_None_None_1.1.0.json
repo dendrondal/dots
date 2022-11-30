@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/dal/Pictures/80scity.png",
+    "alpha": "100",
+    "special": {
+        "background": "#000012",
+        "foreground": "#7ad4d9",
+        "cursor": "#7ad4d9"
+    },
+    "colors": {
+        "color0": "#000012",
+        "color1": "#0B109D",
+        "color2": "#3337B9",
+        "color3": "#045FA1",
+        "color4": "#CB1A9B",
+        "color5": "#029CA8",
+        "color6": "#739989",
+        "color7": "#7ad4d9",
+        "color8": "#559497",
+        "color9": "#0B109D",
+        "color10": "#3337B9",
+        "color11": "#045FA1",
+        "color12": "#CB1A9B",
+        "color13": "#029CA8",
+        "color14": "#739989",
+        "color15": "#7ad4d9"
+    }
+}

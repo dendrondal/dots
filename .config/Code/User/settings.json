@@ -1,0 +1,12 @@
+{
+    "vscode-neovim.neovimExecutablePaths.linux": "/usr/bin/nvim",
+    "workbench.colorTheme": "Visual Studio 2019 Dark",
+    "editor.fontFamily": "'Fira Code'",
+    "vim.enableNeovim": true,
+    "vim.insertModeKeyBindings": [
+        {
+            "before": ["j", "k"],
+            "after": ["<Esc>"]
+          } 
+    ]
+}

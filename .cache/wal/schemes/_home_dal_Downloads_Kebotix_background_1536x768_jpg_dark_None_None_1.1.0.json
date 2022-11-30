@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/dal/Downloads/Kebotix_background_1536x768.jpg",
+    "alpha": "100",
+    "special": {
+        "background": "#08101C",
+        "foreground": "#b1d2eb",
+        "cursor": "#b1d2eb"
+    },
+    "colors": {
+        "color0": "#08101C",
+        "color1": "#1D4D99",
+        "color2": "#205DAE",
+        "color3": "#1C6BC6",
+        "color4": "#2B76C8",
+        "color5": "#368BD9",
+        "color6": "#57A3E3",
+        "color7": "#b1d2eb",
+        "color8": "#7b93a4",
+        "color9": "#1D4D99",
+        "color10": "#205DAE",
+        "color11": "#1C6BC6",
+        "color12": "#2B76C8",
+        "color13": "#368BD9",
+        "color14": "#57A3E3",
+        "color15": "#b1d2eb"
+    }
+}

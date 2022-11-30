@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/dal/Pictures/cyber_mountain.jpeg",
+    "alpha": "100",
+    "special": {
+        "background": "#100719",
+        "foreground": "#7fdfef",
+        "cursor": "#7fdfef"
+    },
+    "colors": {
+        "color0": "#100719",
+        "color1": "#83317C",
+        "color2": "#105F9C",
+        "color3": "#374DA2",
+        "color4": "#A359AD",
+        "color5": "#1889BB",
+        "color6": "#16A2D7",
+        "color7": "#7fdfef",
+        "color8": "#589ca7",
+        "color9": "#83317C",
+        "color10": "#105F9C",
+        "color11": "#374DA2",
+        "color12": "#A359AD",
+        "color13": "#1889BB",
+        "color14": "#16A2D7",
+        "color15": "#7fdfef"
+    }
+}
